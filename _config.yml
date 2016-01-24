@@ -1,0 +1,41 @@
+name: Hahow FAQ
+markdown: kramdown
+baseurl: '/hh-faq'
+prose:
+  rooturl: '_posts'
+  siteurl: 'http://hahow.github.io/hh-faq'
+  media: 'media'
+  ignore:
+    - README.md
+    - index.md
+    - _config.yml
+    - /_layouts
+  metadata:
+    _posts:
+      - name: "layout"
+        field:
+          element: "hidden"
+          value: "post"
+      - name: "published"
+        field:
+          element: "hidden"
+          value: "true"
+      - name: "title"
+        field:
+          element: "text"
+          label: "Title"
+      - name: "chineseTitle"
+        field:
+          element: "text"
+          label: "Chinese Title"
+          value: "default"
+      - name: "category"
+        field:
+          element: "text"
+          label: "Category"
+          value: "default"
+      - name: "section"
+        field:
+          element: "text"
+          label: "Section"
+          value: "default"

@@ -1,0 +1,101 @@
+---
+layout: default
+title: Hahow FAQ
+---
+<h1>{{ page.title }}</h1>
+
+<h1>Why?</h1>
+<div>
+  為了要更容易的維護<a href="https://hahow.zendesk.com/hc/zh-tw" target="_blank">FAQ</a>的內容，使用porse.io搭配github，讓FAQ可以多人共同修改，並且在上到Zendesk以前進行review，確保文章風格內容的一致性
+</div>
+
+<h1><a href="./how-to-use.html">How to use?</a></h1>
+
+<h1>Articles</h1>
+
+<!-- Collecting categories -->
+{% assign categories = "" | split: "|" %}
+{% for post in site.posts %}
+  {% if post.category == "" %}
+    {% continue %}
+  {% endif %}
+  {% assign isExisted = false %}
+  {% for category in categories %}
+    {% if post.category == category %}
+      {% assign isExisted = true %}
+    {% endif %}
+  {% endfor %}
+  
+  {% if isExisted == false %}
+    {% assign categories = categories | push: post.category %}
+  {% endif %}
+{% endfor %}
+
+<ul>
+  {% for category in categories %}
+    <!-- Collections sections for the specific category -->
+    {% assign sections = "" | split: "|" %}
+    {% for post in site.posts %}
+      {% if post.category != category or post.section == "" %}
+        {% continue %}
+      {% endif %}
+
+      {% assign isExisted = false %}
+      {% for section in sections %}
+        {% if post.section == section %}
+          {% assign isExisted = true %}
+        {% endif %}
+      {% endfor %}
+      
+      {% if isExisted == false %}
+        {% assign sections = sections | push: post.section %}
+      {% endif %}
+    {% endfor %}
+
+    <li>
+      <h2>{{ category }}</h2>
+      <ul>
+        {% for section in sections %}
+          <li>
+            <h3>{{ section }}</h3>
+            <ul>
+              {% for post in site.posts %}
+                {% if post.category == category and post.section == section and post.chineseTitle != "" %}
+                  <li>
+                    <a href="{{ post.url | prepend:site.baseurl }}" title="{{ post.chineseTitle }}">{{ post.chineseTitle }}</a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </li>
+        {% endfor %}
+      </ul>
+    </li>
+  {% endfor %}
+</ul>
+
+<!-- Show posts with empty category or section  -->
+{% assign isOthers = false %}
+{% for post in site.posts %}
+  {% if post.category == "" or post.section == "" or post.chineseTitle == "" %}
+    {% assign isOthers = true %}
+  {% endif %}
+{% endfor %}
+
+{% if isOthers == true %}
+  <hr/>
+  <h2>Others</h2>
+  <ul>
+  {% for post in site.posts %}
+    {% if post.category == "" or post.section == "" %}
+      <li>
+        <a href="{{ post.url | prepend:site.baseurl }}" title="{{ post.chineseTitle }}">{{ post.chineseTitle }}</a>
+      </li>
+    {% elsif post.chineseTitle == "" %}
+      <li>
+        <a href="{{ post.url | prepend:site.baseurl }}" title="Undefine">Undefine</a>
+      </li>
+    {% endif %}
+  {% endfor %}
+  </ul>
+{% endif %}
